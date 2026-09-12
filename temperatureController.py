@@ -1,37 +1,19 @@
 import json
 from machine import Pin, ADC
-
+from utime import ticks_ms,ticks_diff, sleep   
+import thermistor
 from tm1637 import TM1637
-
-
-class Compressor:
-    def __init__(self, pin: int):
-        self.pin = Pin(pin, Pin.OUT)
-        self.is_on = False
-        self.time_running = 0
-
-    def turn_on(self):
-        self.is_on = True
-        self.pin.value(1)
-        print("Compressor turned ON.")
-
-    def turn_off(self):
-        self.is_on = False
-        self.pin.value(0)  
-        print("Compressor turned OFF.")
-        
-        
+from compressor import Compressor
+from display import Display
+     
 class TemperatureController:
     def __init__(self,
                  #pins for the peripherals
                  display_clk_pin:int, 
                  display_dio_pin:int,
-                 
                  temp_sensor_pin:int,
                  defrost_sensor_pin:int,
-                 
                  compressor_pin:int, 
-                 
                                   
                  #parameters for the temperature controller
                  password: int = 123, 
@@ -41,8 +23,9 @@ class TemperatureController:
                  hysteresis: int = 2, defrost_interval: int = 17000,
                  defrost_duration: int = 1800):
         
-        self.display = TM1637(clk=Pin(display_clk_pin, Pin.OUT), 
-                              dio=Pin(display_dio_pin, Pin.OUT))
+        
+        self.display = Display(clk_pin=display_clk_pin, 
+                               dio_pin=display_dio_pin)
         
         self.temp_sensor = ADC(Pin(temp_sensor_pin))
         self.defrost_sensor = ADC(Pin(defrost_sensor_pin))
@@ -66,8 +49,7 @@ class TemperatureController:
             "defrost_duration": self.defrost_duration,
         }
         self.save_settings()  # Save settings to file
-        self.load_settings()
-        
+        self.load_settings()  # Load settings from file if available
 
     def load_settings(self):
         try:
@@ -102,3 +84,25 @@ class TemperatureController:
             self.save_settings()
         else:
             raise KeyError(f"Setting '{key}' does not exist.")
+        
+        
+    def calculate_temperature_in_celsius(self, adc_value: int):
+        Vout = (3.3 / 65535) * adc_value
+        TempC = thermistor.thermistorTemp(Vout)
+        return TempC
+    
+    
+    def check_temperature(self,):
+        adc_value = self.temp_sensor.read_u16()
+        return self.calculate_temperature_in_celsius(adc_value)
+
+
+    def check_defrost_sensor(self):
+        adc_value = self.defrost_sensor.read_u16()
+        return self.calculate_temperature_in_celsius(adc_value)
+    
+    
+    def display_temperature(self, temperature: float):
+        msg = f"{int(temperature)}*C"
+        self.display.show(msg)
+        
