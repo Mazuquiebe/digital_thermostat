@@ -7,13 +7,13 @@ class Compressor:
         self.time_running = 0
 
     def turn_on(self):
-        self.is_on = True
         self.pin.value(1)
+        self.is_on = self.pin.value
         print("Compressor turned ON.")
 
     def turn_off(self):
-        self.is_on = False
         self.pin.value(0)  
+        self.is_on = self.pin.value
         print("Compressor turned OFF.")
         
    

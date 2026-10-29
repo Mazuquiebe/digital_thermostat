@@ -26,10 +26,6 @@ modeButton = Pin(8, Pin.IN, Pin.PULL_DOWN)  #the mode button is connected to GPI
 setButton = Pin(9, Pin.IN, Pin.PULL_DOWN)  #the set button is connected to GPIO pin 9
 
 
-
-
-
-
 def calculate_temperature_in_celsius():
     adc = tempSensor.read_u16()
     Vout = (3.3 / 65535) * adc
