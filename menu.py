@@ -1,12 +1,16 @@
 from machine import Pin, ADC
 from display import Display
+from utime import ticks_ms, sleep
+
 
 
 class Menu:
-    def __init__(self, 
-                 clk_pin: int = 0, 
-                 dio_pin: int = 1):
-        
+    def __init__(self,
+                 settings: dict,
+                 clk_pin: int = 0,
+                 dio_pin: int = 1
+                 ):
+        self.settings = settings
         self.display = Display(clk_pin=clk_pin, dio_pin=dio_pin)
         self.menu_options = ["f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10" ]
         self.current_option_index = 0
@@ -18,8 +22,26 @@ class Menu:
         self.mode_button  = Pin(8, Pin.IN, Pin.PULL_DOWN)  
         self.set_button   = Pin(9, Pin.IN, Pin.PULL_DOWN) 
 
-
-
+        match self.current_option:
+            case "f1":
+                self.display.show(self.settings["password"])
+                
+                if self.plus_button.value() == 1:
+                    self.settings["password"] += 1
+                    self.display.show(self.settings["password"])
+                    sleep(0.5)
+                    
+                if self.minus_button.value() == 1:
+                    self.settings["password"] -= 1
+                    self.display.show(self.settings["password"])
+                    sleep(0.5) 
+                    
+                if self.set_button.value() == 1:
+                    self.settings["password"] = self.settings["password"]
+                    self.display.show(self.settings["password"])
+                    sleep(0.5)                
+                
+        
     def display_menu(self):
         if self.show_menu:
             self.display.show(self.menu_options[self.current_option_index])
