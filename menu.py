@@ -7,13 +7,13 @@ from utime import ticks_ms, sleep
 class Menu:
     def __init__(self,
                  settings: dict,
-                 clk_pin: int = 0,
-                 dio_pin: int = 1
+                 display: Display
                  ):
         self.settings = settings
-        self.display = Display(clk_pin=clk_pin, dio_pin=dio_pin)
-        self.menu_options = ["f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10" ]
-        self.current_option_index = 0
+        self.display = display
+        self.menu_options = range(1, len(settings) + 1)
+        # self.menu_options = ["f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8", "f9", "f10" ]
+        self.current_option_index = 1
         self.current_option = self.menu_options[self.current_option_index]
         self.show_menu = False
         
@@ -23,7 +23,7 @@ class Menu:
         self.set_button   = Pin(9, Pin.IN, Pin.PULL_DOWN) 
 
         match self.current_option:
-            case "f1":
+            case 1:
                 self.display.show(self.settings["password"])
                 
                 if self.plus_button.value() == 1:
@@ -44,13 +44,13 @@ class Menu:
         
     def display_menu(self):
         if self.show_menu:
-            self.display.show(self.menu_options[self.current_option_index])
+            self.display.show(f"f{self.menu_options[self.current_option_index]}" )
             
             for i, option in enumerate(self.menu_options):
                 if i == self.current_option_index:
-                    self.display.show(option)
+                    self.display.show(f"f{option}")
                 else:
-                    self.display.show(option)
+                    self.display.show(f"f{option}")
 
 
     def next_option(self):

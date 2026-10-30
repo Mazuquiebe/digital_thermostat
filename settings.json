@@ -1,0 +1,16 @@
+{
+// "f1"
+    "password": 1234,
+// "f2"
+    "target_temperature": 2.00,
+// "f3"
+    "maximum_permitted_temperature": 5.00,
+// "f4"
+    "minimum_permitted_temperature": -10.00,
+// "f5"
+    "hysteresis": 2.00,
+// "f6"
+    "defrost_interval": 3600,
+// "f7"
+    "defrost_duration": 1800
+}
