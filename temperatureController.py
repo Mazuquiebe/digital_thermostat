@@ -49,18 +49,5 @@ class TemperatureController:
         self.display.show(msg)
         
         
-    def animated_message(self, msg: str):
-        for m in msg:
-            msg_length = len(msg)
-            m_index = msg.index(m)
-            
-            if msg.index(m) >= msg_length-1:
-                self.display.show(f"{m}")
-                sleep(0.5)  
-            else:
-                self.display.show(msg[m_index:msg_length])
-                sleep(0.5)  
-                self.display.show("    ")
-      
-        self.display.show("    ")
+
   
