@@ -3,7 +3,6 @@ from display import Display
 from utime import ticks_ms, sleep
 
 
-
 class Menu:
     def __init__(self,
                  settings: dict,
@@ -22,8 +21,8 @@ class Menu:
         self.mode_button  = Pin(8, Pin.IN, Pin.PULL_DOWN)  
         self.set_button   = Pin(9, Pin.IN, Pin.PULL_DOWN) 
 
-        match self.current_option:
-            case 1:
+        if self.current_option:
+            if self.current_option == 1:
                 self.display.show(self.settings["password"])
                 
                 if self.plus_button.value() == 1:

@@ -1,15 +1,17 @@
+from time import sleep
+
 from compressor import Compressor
+import json
+
 from display import Display
 from settings import Settings
 from temperatureController import TemperatureController
 from menu import Menu
 
-from utime import sleep
-
 
 display = Display(clk_pin=0, dio_pin=1)
 settings = Settings()
-compressor = Compressor(2)  #the compressor output is connected to GPIO pin 2
+compressor = Compressor(2)
 menu = Menu(settings=settings.parameters, display=display)
 
 controller = TemperatureController(
@@ -21,14 +23,28 @@ controller = TemperatureController(
     display=display
 )
 
+
+# def load_settings():
+    
+#     with open("settings.json", "r") as f:
+#         loaded_settings = json.load(f)
+#         print("Loaded settings:", loaded_settings)
+#         return loaded_settings
+
+# load_settings()
+controller.compressor.is_on        
 while True: 
     
     temperature = controller.check_temperature()
-    controller.display_temperature(temperature)
 
     msg = f"{int(temperature)}*Celcius"
-    sleep(5)
 
-    controller.display.scroll_message(msg)
+    # controller.display.show("1234")
+    if(controller.compressor.is_on and temperature > controller.parameters["max_temp"]) or (controller.compressor.is_on and temperature < controller.parameters["min_temp"]):
+        controller.compressor.turn_off()
+    elif controller.compressor.is_off and temperature < controller.parameters["target_temp"]:
+        controller.compressor.turn_on()
+        
+    display.scroll(msg)
     
 print("Finished.")

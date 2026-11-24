@@ -44,9 +44,9 @@ class TemperatureController:
         return self.calculate_temperature_in_celsius(adc_value)
     
     
-    def display_temperature(self, temperature: float):
-        msg = f"{int(temperature)}*C"
-        self.display.show(msg)
+    # def display_temperature(self, temperature: float):
+    #     msg = f"{int(temperature)}*C"
+    #     self.display.show(msg)
         
         
 

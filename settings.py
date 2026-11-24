@@ -12,9 +12,7 @@ class Settings:
                  defrost_interval: int = 17000,
                  defrost_duration: int = 1800):
        
-        self.parameters = self.load_settings()
-        if self.parameters is None:
-            self.parameters = {
+        self.parameters = {
                 "password": password,
                 "target_temperature": target_temperature,
                 "maximum_permitted_temperature": maximum_permitted_temperature,
@@ -22,7 +20,7 @@ class Settings:
                 "hysteresis": hysteresis,
                 "defrost_interval": defrost_interval,
                 "defrost_duration": defrost_duration,
-            }
+        }
         self.save_settings(self.parameters)
             
             

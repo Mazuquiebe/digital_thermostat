@@ -9,11 +9,13 @@ class Compressor:
     def turn_on(self):
         self.pin.value(1)
         self.is_on = self.pin.value
-        print("Compressor turned ON.")
+        return self.is_on
+        # print("Compressor turned ON.")
 
     def turn_off(self):
         self.pin.value(0)  
         self.is_on = self.pin.value
-        print("Compressor turned OFF.")
+        return self.is_on
+        # print("Compressor turned OFF.")
         
    
