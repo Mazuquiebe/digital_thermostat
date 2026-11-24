@@ -27,7 +27,7 @@ There are no external dependencies beyond MicroPython and the hardware modules i
 
 ## Current behavior
 
-The main program reads the sensor connected to GPIO 26 and converts the ADC reading to Celsius. In the main loop, it turns the compressor output on when the temperature is below 0 °C; otherwise, it turns the output off, waits five seconds, and scrolls the temperature across the display.
+The main program reads the sensor connected to GPIO 26 and converts the ADC reading to Celsius. In the main loop, it turns the compressor output on when the temperature is higher than the target temperature; otherwise, it turns the output off, waits five seconds, and scrolls the temperature across the display.
 
 The parameters in [settings.py](./settings.py) include a target temperature, limits, hysteresis, and defrost settings. These parameters do not currently control the main loop. The `Settings` class also writes the default values to `settings.json` when initialized. Defrost sensor reading and the menu are present in the code, but they are not yet integrated into a functional control cycle.
 
